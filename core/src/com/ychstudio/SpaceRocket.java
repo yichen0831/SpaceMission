@@ -45,7 +45,11 @@ public class SpaceRocket extends Game {
 		stage = new Stage(viewport, batch);
 		fpsLabel = new Label("FPS:", VisUI.getSkin());
 		fpsLabel.setPosition(6f, 6f);
+
+		Label versionLabel = new Label("Version 0.1", VisUI.getSkin());
+		versionLabel.setPosition(w - versionLabel.getWidth() - 6f, 6f);
 		stage.addActor(fpsLabel);
+		stage.addActor(versionLabel);
 		
 		setScreen(new MenuScreen(this));
 	}

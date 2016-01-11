@@ -129,17 +129,17 @@ public class MenuScreen implements Screen {
 
         for (Image rock : rocks) {
             if (rock.getX() < -rock.getWidth()) {
-                rock.setX(Gdx.graphics.getWidth() + rock.getWidth() / 2);
+                rock.setX(Gdx.graphics.getWidth() + rock.getWidth());
             }
             else if (rock.getX() > Gdx.graphics.getWidth() + rock.getWidth()) {
-                rock.setX(-rock.getWidth() / 2);
+                rock.setX(-rock.getWidth());
             }
 
             if (rock.getY() < -rock.getHeight()) {
-                rock.setY(Gdx.graphics.getHeight() + rock.getHeight() / 2);
+                rock.setY(Gdx.graphics.getHeight() + rock.getHeight());
             }
             else if (rock.getY() > Gdx.graphics.getHeight() + rock.getHeight()) {
-                rock.setY(-rock.getHeight() / 2);
+                rock.setY(-rock.getHeight());
             }
         }
         
