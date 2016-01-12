@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.ychstudio.SpaceRocket;
 import com.ychstudio.actors.Actor;
+import com.ychstudio.actors.Ground;
 import com.ychstudio.actors.Player;
 import com.ychstudio.gamesys.ActorBuilder;
 
@@ -42,15 +43,18 @@ public class PlayScreen implements Screen{
         camera = new OrthographicCamera();
         viewport = new FitViewport(20f, 30f, camera);
         camera.translate(10, 15);
-        world = new World(new Vector2(0, -9.8f), true);
+        world = new World(new Vector2(0, -20f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
         
         actors = new Array<>();
         
         ActorBuilder.setWorld(world);
         
-        Player player = ActorBuilder.createPlayer(10f, 30f);
+        Player player = ActorBuilder.createPlayer(10f, 2.8f);
         actors.add(player);
+        
+        Ground ground = ActorBuilder.createGround(10f, 1f);
+        actors.add(ground);
         
         paused = false;
         
