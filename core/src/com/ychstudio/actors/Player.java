@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ychstudio.gamesys.GM;
 
 public class Player extends Actor {
+    
+    public static final float MAX_SPEED = 20.0f;
     
     private Sprite flame;
     private boolean left_throttle;
@@ -66,6 +69,11 @@ public class Player extends Actor {
             right_throttle = false;
         }
         
+        // limit player's speed
+        if (body.getLinearVelocity().len2() > MAX_SPEED * MAX_SPEED) {
+            body.setLinearVelocity(body.getLinearVelocity().nor().scl(MAX_SPEED));
+        }
+        
         x = body.getPosition().x;
         y = body.getPosition().y;
         sprite.setPosition(x - width / 2, y - height / 2);
@@ -96,6 +104,10 @@ public class Player extends Actor {
         float x = body.getLinearVelocity().x;
         float y = body.getLinearVelocity().y;
         return (float) Math.sqrt(x * x + y * y);
+    }
+    
+    public Vector2 getPosition() {
+        return body.getPosition();
     }
 
 }
