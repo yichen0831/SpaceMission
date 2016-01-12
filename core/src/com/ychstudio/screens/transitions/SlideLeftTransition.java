@@ -2,7 +2,6 @@ package com.ychstudio.screens.transitions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
@@ -24,16 +23,9 @@ public class SlideLeftTransition implements ScreenTransition {
         float w = Gdx.graphics.getWidth();
         alpha = Interpolation.fade.apply(alpha);
         
-        Sprite currentSprite = new Sprite(currentScreenTexture);
-        currentSprite.flip(false, true);
-        currentSprite.setPosition(w * alpha, 0);
-        Sprite nextSprite = new Sprite(nextScreenTexture);
-        nextSprite.flip(false, true);
-        nextSprite.setPosition(-w + w * alpha, 0);
-        
         batch.begin();
-        currentSprite.draw(batch);
-        nextSprite.draw(batch);
+        batch.draw(currentScreenTexture, w * alpha, 0, w, currentScreenTexture.getHeight(), 0, 0, (int)w, currentScreenTexture.getHeight(), false, true);
+        batch.draw(nextScreenTexture, -w + w * alpha, 0, w, nextScreenTexture.getHeight(), 0, 0, (int)w, nextScreenTexture.getHeight(), false, true);
         batch.end();
     }
 
