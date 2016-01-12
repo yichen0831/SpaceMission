@@ -73,10 +73,15 @@ public class ActorBuilder {
         float height = 64f / GM.PPM;
         
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2);
+        shape.set(new float[] {
+                -width / 2, -height / 2,
+                width / 2, -height / 2,
+                width / 4, height / 2,
+                -width / 4, height / 2
+        });
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 4f;
+        fixtureDef.density = 4.8f;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = GM.PLAYER_CATEGORY_BITS;
         fixtureDef.filter.maskBits = GM.PLAYER_MASK_BITS;

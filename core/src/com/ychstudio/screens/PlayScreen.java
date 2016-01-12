@@ -6,11 +6,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.kotcrab.vis.ui.VisUI;
 import com.ychstudio.SpaceRocket;
 import com.ychstudio.actors.Actor;
 import com.ychstudio.actors.Ground;
@@ -23,6 +27,9 @@ public class PlayScreen implements Screen{
     private SpaceRocket game;
     private SpriteBatch batch;
     
+    private Stage stage;
+    private Label playerSpeedLabel;
+    
     private FitViewport viewport;
     private OrthographicCamera camera;
     
@@ -32,6 +39,7 @@ public class PlayScreen implements Screen{
     private boolean paused;
     
     private Array<Actor> actors;
+    private Player player;
     
     public PlayScreen(SpaceRocket game) {
         this.game = game;
@@ -40,9 +48,16 @@ public class PlayScreen implements Screen{
     @Override
     public void show() {
         batch = new SpriteBatch();
+        
+        stage = new Stage();
+        playerSpeedLabel = new Label("Speed:", VisUI.getSkin());
+        playerSpeedLabel.setPosition(6f, Gdx.graphics.getHeight() - 22f);
+        stage.addActor(playerSpeedLabel);
+        
         camera = new OrthographicCamera();
         viewport = new FitViewport(20f, 30f, camera);
-        camera.translate(10, 15);
+        camera.zoom = 0.4f;
+        camera.translate(10f, 15f * camera.zoom);
         world = new World(new Vector2(0, -20f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
         
@@ -50,7 +65,7 @@ public class PlayScreen implements Screen{
         
         ActorBuilder.setWorld(world);
         
-        Player player = ActorBuilder.createPlayer(10f, 2.8f);
+        player = ActorBuilder.createPlayer(10f, 2.8f);
         actors.add(player);
         
         Ground ground = ActorBuilder.createGround(10f, 1f);
@@ -66,6 +81,9 @@ public class PlayScreen implements Screen{
         for (Actor actor : actors) {
             actor.update(delta);
         }
+        
+        playerSpeedLabel.setText(String.format("Speed: %.2f", player.getSpeed()));
+        camera.zoom = MathUtils.clamp(player.getSpeed() / 10f, 0.4f, 2f);
     }
     
     public void inputHandle(float delta) {
@@ -96,6 +114,8 @@ public class PlayScreen implements Screen{
         }
         batch.end();
         
+        stage.draw();
+        
         box2DDebugRenderer.render(world, camera.combined);
     }
 
@@ -124,5 +144,6 @@ public class PlayScreen implements Screen{
         world.dispose();
         box2DDebugRenderer.dispose();
         batch.dispose();
+        stage.dispose();
     }
 }

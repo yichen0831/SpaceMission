@@ -91,5 +91,11 @@ public class Player extends Actor {
             flame.draw(batch);
         }
     }
+    
+    public float getSpeed() {
+        float x = body.getLinearVelocity().x;
+        float y = body.getLinearVelocity().y;
+        return (float) Math.sqrt(x * x + y * y);
+    }
 
 }
