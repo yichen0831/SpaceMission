@@ -59,9 +59,10 @@ public class ActorBuilder {
     public static Player createPlayer(float x, float y) {
         World world = instance.world;
         AssetManager assetManager = instance.assetManager;
-        Texture spaceRocketTexture = assetManager.get("images/SpaceShip.png", Texture.class);
+        Texture spaceShipTexture = assetManager.get("images/SpaceShip.png", Texture.class);
+        spaceShipTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         
-        Sprite sprite = new Sprite(spaceRocketTexture);
+        Sprite sprite = new Sprite(spaceShipTexture);
         
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;

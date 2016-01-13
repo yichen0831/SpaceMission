@@ -20,11 +20,14 @@ import com.ychstudio.SpaceRocket;
 import com.ychstudio.actors.Actor;
 import com.ychstudio.actors.Ground;
 import com.ychstudio.actors.Player;
+import com.ychstudio.background.Background;
 import com.ychstudio.gamesys.ActorBuilder;
 import com.ychstudio.gamesys.GM;
 
 
 public class PlayScreen implements Screen{
+    public final float WIDTH = 20f;
+    public final float HEIGHT = 30f;
     
     private SpaceRocket game;
     private SpriteBatch batch;
@@ -39,12 +42,15 @@ public class PlayScreen implements Screen{
     
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
+    private boolean showBox2DDebugRenderer = true;
     
     private boolean paused;
     private boolean player_paused;
     
     private Array<Actor> actors;
     private Player player;
+    
+    private Background background;
     
     public PlayScreen(SpaceRocket game) {
         this.game = game;
@@ -69,9 +75,9 @@ public class PlayScreen implements Screen{
         stage.addActor(playerPauseLabel);
         
         camera = new OrthographicCamera();
-        viewport = new FitViewport(20f, 30f, camera);
+        viewport = new FitViewport(WIDTH, HEIGHT, camera);
         camera.zoom = 0.4f;
-        camera.translate(10f, 15f * camera.zoom);
+        camera.translate(WIDTH/2, HEIGHT/2 * camera.zoom);
         world = new World(new Vector2(0, -20f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
         
@@ -79,11 +85,13 @@ public class PlayScreen implements Screen{
         
         ActorBuilder.setWorld(world);
         
-        player = ActorBuilder.createPlayer(10f, 2.5f);
+        player = ActorBuilder.createPlayer(WIDTH/2, 2.5f);
         actors.add(player);
         
-        Ground ground = ActorBuilder.createGround(10f, 1f);
+        Ground ground = ActorBuilder.createGround(WIDTH/2, 1f);
         actors.add(ground);
+        
+        background = new Background(batch, WIDTH, HEIGHT);
         
         paused = false;
         player_paused = false;
@@ -111,12 +119,13 @@ public class PlayScreen implements Screen{
             }
         }
         else {
-            target_zoom = MathUtils.clamp(player.getSpeed() / 10f, 0.8f, 1.5f);
+            target_zoom = MathUtils.clamp(player.getSpeed() / 10f, 0.9f, 1.0f);
             camera.position.y = player.getPosition().y;
         }
         
         camera.zoom = MathUtils.lerp(camera.zoom, target_zoom, 0.1f);
         
+        background.update(player.getPosition());
     }
     
     public void inputHandle(float delta) {
@@ -130,6 +139,10 @@ public class PlayScreen implements Screen{
             if (player_paused) {
                 game.backToMenu();
             }
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+            showBox2DDebugRenderer = !showBox2DDebugRenderer;
         }
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
@@ -151,9 +164,12 @@ public class PlayScreen implements Screen{
         
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.25f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        background.render();
         for (Actor actor : actors) {
             actor.render(batch);
         }
@@ -161,7 +177,9 @@ public class PlayScreen implements Screen{
         
         stage.draw();
         
-        box2DDebugRenderer.render(world, camera.combined);
+        if (showBox2DDebugRenderer) {
+            box2DDebugRenderer.render(world, camera.combined);
+        }
     }
 
     @Override

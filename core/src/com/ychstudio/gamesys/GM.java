@@ -34,6 +34,8 @@ public class GM {
         assetManager.load("images/SpaceShip.png", Texture.class);
         assetManager.load("images/Flame.png", Texture.class);
         assetManager.load("images/Ground.png", Texture.class);
+        assetManager.load("images/EarthBackground.png", Texture.class);
+        assetManager.load("images/SpaceBackground.png", Texture.class);
         assetManager.finishLoading();
     }
 }
