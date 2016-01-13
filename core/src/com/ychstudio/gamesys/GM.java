@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 public class GM {
     private static GM instance = new GM();
     
-    public static final float PPM = 64;
+    public static final float PPM = 64f;
+    
+    public static final float SKY_LINE = 20f;
     
     public static final short GROUND_CATEGORY_BITS = 1;
     public static final short PLAYER_CATEGORY_BITS = 2;
@@ -31,6 +33,7 @@ public class GM {
         assetManager.load("images/Rock32.png", Texture.class);
         assetManager.load("images/SpaceShip.png", Texture.class);
         assetManager.load("images/Flame.png", Texture.class);
+        assetManager.load("images/Ground.png", Texture.class);
         assetManager.finishLoading();
     }
 }

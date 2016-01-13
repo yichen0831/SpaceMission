@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
@@ -20,6 +21,7 @@ import com.ychstudio.actors.Actor;
 import com.ychstudio.actors.Ground;
 import com.ychstudio.actors.Player;
 import com.ychstudio.gamesys.ActorBuilder;
+import com.ychstudio.gamesys.GM;
 
 
 public class PlayScreen implements Screen{
@@ -29,6 +31,8 @@ public class PlayScreen implements Screen{
     
     private Stage stage;
     private Label playerSpeedLabel;
+    private Label playerPositionLabel;
+    private Label playerPauseLabel;
     
     private FitViewport viewport;
     private OrthographicCamera camera;
@@ -37,6 +41,7 @@ public class PlayScreen implements Screen{
     private Box2DDebugRenderer box2DDebugRenderer;
     
     private boolean paused;
+    private boolean player_paused;
     
     private Array<Actor> actors;
     private Player player;
@@ -52,7 +57,16 @@ public class PlayScreen implements Screen{
         stage = new Stage();
         playerSpeedLabel = new Label("Speed:", VisUI.getSkin());
         playerSpeedLabel.setPosition(6f, Gdx.graphics.getHeight() - 22f);
+        playerPositionLabel = new Label("Pos:", VisUI.getSkin());
+        playerPositionLabel.setPosition(6f, Gdx.graphics.getHeight() - 42f);
+        playerPauseLabel = new Label("Paused\npress Y to go back to menu", VisUI.getSkin());
+        playerPauseLabel.setAlignment(Align.center);
+        playerPauseLabel.setPosition((Gdx.graphics.getWidth() - playerPauseLabel.getWidth()) / 2,
+                                        (Gdx.graphics.getHeight() - playerPauseLabel.getHeight()) / 2);
+        playerPauseLabel.setVisible(false);
         stage.addActor(playerSpeedLabel);
+        stage.addActor(playerPositionLabel);
+        stage.addActor(playerPauseLabel);
         
         camera = new OrthographicCamera();
         viewport = new FitViewport(20f, 30f, camera);
@@ -65,13 +79,14 @@ public class PlayScreen implements Screen{
         
         ActorBuilder.setWorld(world);
         
-        player = ActorBuilder.createPlayer(10f, 2.8f);
+        player = ActorBuilder.createPlayer(10f, 2.5f);
         actors.add(player);
         
         Ground ground = ActorBuilder.createGround(10f, 1f);
         actors.add(ground);
         
         paused = false;
+        player_paused = false;
         
     }
     
@@ -83,10 +98,40 @@ public class PlayScreen implements Screen{
         }
         
         playerSpeedLabel.setText(String.format("Speed: %.2f", player.getSpeed()));
-        camera.zoom = MathUtils.clamp(player.getSpeed() / 10f, 0.4f, 2f);
+        playerPositionLabel.setText(String.format("Pos: %.2f, %.2f", player.getPosition().x, player.getPosition().y));
+        
+        float target_zoom = camera.zoom;
+        if (player.getPosition().y < GM.SKY_LINE) {
+            target_zoom = 0.4f;
+            if (player.getPosition().y < 6.0f) {
+                camera.position.y = 6;
+            }
+            else {
+                camera.position.y = player.getPosition().y;
+            }
+        }
+        else {
+            target_zoom = MathUtils.clamp(player.getSpeed() / 10f, 0.8f, 1.5f);
+            camera.position.y = player.getPosition().y;
+        }
+        
+        camera.zoom = MathUtils.lerp(camera.zoom, target_zoom, 0.1f);
+        
     }
     
     public void inputHandle(float delta) {
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            player_paused = !player_paused;
+            playerPauseLabel.setVisible(player_paused);
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+            if (player_paused) {
+                game.backToMenu();
+            }
+        }
+        
         if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
             camera.zoom += 0.1f;
         }
@@ -100,7 +145,7 @@ public class PlayScreen implements Screen{
     public void render(float delta) {
         inputHandle(delta);
         
-        if (!paused) {
+        if (!(paused || player_paused)) {
             update(delta);
         }
         

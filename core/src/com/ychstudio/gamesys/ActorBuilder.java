@@ -30,7 +30,7 @@ public class ActorBuilder {
         World world = instance.world;
         AssetManager assetManager = instance.assetManager;
         // TODO requires texture
-        Sprite sprite = new Sprite();
+        Sprite sprite = new Sprite(assetManager.get("images/Ground.png", Texture.class));
         
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.StaticBody;
@@ -66,6 +66,7 @@ public class ActorBuilder {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
         bodyDef.position.set(x, y);
+        bodyDef.angularDamping = 0.5f;
         
         Body body = world.createBody(bodyDef);
         

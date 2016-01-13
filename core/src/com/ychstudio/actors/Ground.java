@@ -17,8 +17,7 @@ public class Ground extends Actor{
 
     @Override
     public void render(SpriteBatch batch) {
-//        sprite.draw(batch);
-        
+        sprite.draw(batch);
     }
 
 }

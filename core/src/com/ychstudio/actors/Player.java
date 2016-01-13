@@ -39,7 +39,7 @@ public class Player extends Actor {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             // reset player
             body.setLinearVelocity(0, 0);
-            body.setTransform(10f, 2.8f, 0);
+            body.setTransform(10f, 2.5f, 0);
             body.setAngularVelocity(0);
         }
         
@@ -72,6 +72,16 @@ public class Player extends Actor {
         // limit player's speed
         if (body.getLinearVelocity().len2() > MAX_SPEED * MAX_SPEED) {
             body.setLinearVelocity(body.getLinearVelocity().nor().scl(MAX_SPEED));
+        }
+        
+        // when player enters the space
+        if (body.getPosition().y > GM.SKY_LINE) {
+            body.setGravityScale(0);
+            body.setLinearDamping(0.25f);
+        }
+        else {
+            body.setGravityScale(1);
+            body.setLinearDamping(0);
         }
         
         x = body.getPosition().x;
