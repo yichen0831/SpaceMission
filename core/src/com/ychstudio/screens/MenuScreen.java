@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -33,8 +32,6 @@ public class MenuScreen implements Screen {
     private Color unselectedColor = new Color(0.6f, 0.6f, 0.6f, 1.0f);
     private int selected = 0;
     private Array<Label> options;
-
-    private Array<Image> rocks;
 
     private AssetManager assetManager;
 
@@ -63,18 +60,9 @@ public class MenuScreen implements Screen {
 
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage(viewport, batch);
-
-        // rocks
-        rocks = new Array<>();
-        for (int i = 0; i < 60; i++) {
-            Image rock = new Image(assetManager.get("images/Rock.png", Texture.class));
-            rock.setScale(MathUtils.random(0.4f, 1.2f));
-            rock.setOrigin(rock.getWidth() / 2, rock.getHeight() / 2);
-            rock.setPosition(MathUtils.random(0, Gdx.graphics.getWidth()), MathUtils.random(0, Gdx.graphics.getHeight()));
-            rock.addAction(Actions.forever(Actions.parallel(Actions.rotateBy(MathUtils.random(66f), 1f), Actions.moveBy(MathUtils.random(60f) - 30f, MathUtils.random(60f) - 30f, MathUtils.random(1f, 3f)))));
-            stage.addActor(rock);
-            rocks.add(rock);
-        }
+        
+        Image starsImage = new Image(assetManager.get("images/Stars.png", Texture.class));
+        stage.addActor(starsImage);
 
         Label titleLabel = new Label("SpaceRocket", new Label.LabelStyle(monoFont64, Color.WHITE));
         titleLabel.setPosition((Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2, Gdx.graphics.getHeight() - 180);
@@ -95,8 +83,6 @@ public class MenuScreen implements Screen {
         
         startGameLabel.addAction(Actions.color(selectedColor));
         exitGameLabel.addAction(Actions.color(unselectedColor));
-
-
 
         paused = false;
         
@@ -127,22 +113,6 @@ public class MenuScreen implements Screen {
             }
         }
 
-        for (Image rock : rocks) {
-            if (rock.getX() < -rock.getWidth()) {
-                rock.setX(Gdx.graphics.getWidth() + rock.getWidth());
-            }
-            else if (rock.getX() > Gdx.graphics.getWidth() + rock.getWidth()) {
-                rock.setX(-rock.getWidth());
-            }
-
-            if (rock.getY() < -rock.getHeight()) {
-                rock.setY(Gdx.graphics.getHeight() + rock.getHeight());
-            }
-            else if (rock.getY() > Gdx.graphics.getHeight() + rock.getHeight()) {
-                rock.setY(-rock.getHeight());
-            }
-        }
-        
         stage.act(delta);
     }
 
@@ -152,7 +122,7 @@ public class MenuScreen implements Screen {
             update(delta);
         }
         
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.3f, 1f);
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }

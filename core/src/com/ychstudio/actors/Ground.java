@@ -8,6 +8,11 @@ public class Ground extends Actor{
 
     public Ground(Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
+        
+        this.width = 40f;
+        this.height = 8f;
+        
+        sprite.setBounds(x - this.width / 2, y - this.height / 2 - 2.4f, this.width, this.height);
     }
 
     @Override

@@ -29,8 +29,8 @@ public class ActorBuilder {
     public static Ground createGround(float x, float y) {
         World world = instance.world;
         AssetManager assetManager = instance.assetManager;
-        // TODO requires texture
-        Sprite sprite = new Sprite(assetManager.get("images/Ground.png", Texture.class));
+        Texture earthTexture = assetManager.get("images/Earth.png", Texture.class);
+        Sprite sprite = new Sprite(earthTexture);
         
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.StaticBody;

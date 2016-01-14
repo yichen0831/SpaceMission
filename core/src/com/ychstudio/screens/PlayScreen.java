@@ -162,7 +162,7 @@ public class PlayScreen implements Screen{
             update(delta);
         }
         
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.25f, 1.0f);
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         

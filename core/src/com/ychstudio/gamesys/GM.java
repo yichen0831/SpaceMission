@@ -33,9 +33,15 @@ public class GM {
         assetManager.load("images/Rock32.png", Texture.class);
         assetManager.load("images/SpaceShip.png", Texture.class);
         assetManager.load("images/Flame.png", Texture.class);
-        assetManager.load("images/Ground.png", Texture.class);
         assetManager.load("images/EarthBackground.png", Texture.class);
-        assetManager.load("images/SpaceBackground.png", Texture.class);
+        assetManager.load("images/Stars.png", Texture.class);
+        assetManager.load("images/BlueDust.png", Texture.class);
+        assetManager.load("images/ColdNebula.png", Texture.class);
+        assetManager.load("images/HotNebula.png", Texture.class);
+        assetManager.load("images/VioletDust.png", Texture.class);
+        assetManager.load("images/YellowDust.png", Texture.class);
+        assetManager.load("images/Moon.png", Texture.class);
+        assetManager.load("images/Earth.png", Texture.class);
         assetManager.finishLoading();
     }
 }
