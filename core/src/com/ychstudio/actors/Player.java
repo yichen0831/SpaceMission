@@ -25,7 +25,7 @@ public class Player extends Actor {
     public Player(Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
         flame = new Sprite(GM.getAssetManager().get("images/Flame.png", Texture.class));
-        flame.setSize(width / 2f, height / 2f);
+        flame.setSize(width / 2f, height);
         
         left_throttle = false;
         right_throttle = false;
@@ -95,7 +95,6 @@ public class Player extends Actor {
 
     @Override
     public void render(SpriteBatch batch) {
-        sprite.draw(batch);
         if (left_throttle) {
             flame.setPosition(x - width / 2, y - height);
             flame.setOrigin(width / 2, height);
@@ -108,6 +107,7 @@ public class Player extends Actor {
             flame.setRotation(rotation);
             flame.draw(batch);
         }
+        sprite.draw(batch);
     }
     
     public float getSpeed() {
