@@ -2,6 +2,7 @@ package com.ychstudio.gamesys;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
 public class GM {
     private static GM instance = new GM();
@@ -42,6 +43,7 @@ public class GM {
         assetManager.load("images/YellowDust.png", Texture.class);
         assetManager.load("images/Moon.png", Texture.class);
         assetManager.load("images/Earth.png", Texture.class);
+        assetManager.load("particles/explode.particle", ParticleEffect.class);
         assetManager.finishLoading();
     }
 }

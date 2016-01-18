@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -50,6 +51,8 @@ public class PlayScreen implements Screen{
     private Array<Actor> actors;
     private Player player;
     
+    private Array<ParticleEffect> particleEffects;
+    
     private Background background;
     
     public PlayScreen(SpaceRocket game) {
@@ -85,11 +88,13 @@ public class PlayScreen implements Screen{
         
         ActorBuilder.setWorld(world);
         
-        player = ActorBuilder.createPlayer(WIDTH/2, 2.5f);
+        player = ActorBuilder.createPlayer(this, WIDTH/2, 2.5f);
         actors.add(player);
         
         Ground ground = ActorBuilder.createGround(WIDTH/2, 1f);
         actors.add(ground);
+        
+        particleEffects = new Array<>();
         
         background = new Background(batch, WIDTH, HEIGHT);
         
@@ -103,6 +108,12 @@ public class PlayScreen implements Screen{
         
         for (Actor actor : actors) {
             actor.update(delta);
+        }
+        
+        for (int i = particleEffects.size - 1; i >= 0; i--) {
+            if (particleEffects.get(i).isComplete()) {
+                particleEffects.removeIndex(i);
+            }
         }
         
         playerSpeedLabel.setText(String.format("Speed: %.2f", player.getSpeed()));
@@ -136,7 +147,7 @@ public class PlayScreen implements Screen{
         }
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
-            if (player_paused) {
+            if (player_paused && !paused) {
                 game.backToMenu();
             }
         }
@@ -145,13 +156,6 @@ public class PlayScreen implements Screen{
             showBox2DDebugRenderer = !showBox2DDebugRenderer;
         }
         
-        if (Gdx.input.isKeyJustPressed(Input.Keys.EQUALS)) {
-            camera.zoom += 0.1f;
-        }
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
-            camera.zoom -= 0.1f;
-        }
     }
 
     @Override
@@ -173,6 +177,10 @@ public class PlayScreen implements Screen{
         for (Actor actor : actors) {
             actor.render(batch);
         }
+        
+        for (ParticleEffect effect : particleEffects) {
+            effect.draw(batch, delta);
+        }
         batch.end();
         
         stage.draw();
@@ -180,6 +188,10 @@ public class PlayScreen implements Screen{
         if (showBox2DDebugRenderer) {
             box2DDebugRenderer.render(world, camera.combined);
         }
+    }
+    
+    public Array<ParticleEffect> getParticleEffectArray() {
+        return particleEffects;
     }
 
     @Override

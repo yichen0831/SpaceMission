@@ -3,27 +3,35 @@ package com.ychstudio.actors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
+import com.ychstudio.gamesys.ActorBuilder;
 import com.ychstudio.gamesys.GM;
+import com.ychstudio.screens.PlayScreen;
 
 public class Player extends Actor {
     
     public static final float MAX_SPEED = 20.0f;
     
+    private PlayScreen playScreen;
     private Sprite flame;
     private boolean left_throttle;
     private boolean right_throttle;
     private float rotation;
     private float power = 0.8f;
     
+    private boolean alive;
+    
     private static final float SQRT5 = (float) Math.sqrt(5.0);
 
-    public Player(Body body, Sprite sprite, float width, float height) {
+    public Player(PlayScreen playScreen, Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
+        this.playScreen = playScreen;
         flame = new Sprite(GM.getAssetManager().get("images/Flame.png", Texture.class));
         flame.setSize(width / 2f, height);
         
@@ -31,6 +39,8 @@ public class Player extends Actor {
         right_throttle = false;
         
         rotation = 0;
+        
+        alive = true;
     }
 
     @Override
@@ -41,32 +51,41 @@ public class Player extends Actor {
             body.setLinearVelocity(0, 0);
             body.setTransform(10f, 2.5f, 0);
             body.setAngularVelocity(0);
+            alive = true;
         }
         
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            left_throttle = true;
-            float px = power * MathUtils.sin(-body.getAngle());
-            float py = power * MathUtils.cos(-body.getAngle());
-            float dx = x - (width / 4f * SQRT5) * MathUtils.sin(-body.getAngle() + MathUtils.PI / 8f);
-            float dy = y - (height / 4f * SQRT5) * MathUtils.cos(-body.getAngle() + MathUtils.PI / 8f);
-            
-            body.applyLinearImpulse(px, py, dx, dy, true);
+        if (alive) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                left_throttle = true;
+                float px = power * MathUtils.sin(-body.getAngle());
+                float py = power * MathUtils.cos(-body.getAngle());
+                float dx = x - (width / 4f * SQRT5) * MathUtils.sin(-body.getAngle() + MathUtils.PI / 8f);
+                float dy = y - (height / 4f * SQRT5) * MathUtils.cos(-body.getAngle() + MathUtils.PI / 8f);
+
+                body.applyLinearImpulse(px, py, dx, dy, true);
+            }
+            else {
+                left_throttle = false;
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                right_throttle = true;
+                float px = power * MathUtils.sin(-body.getAngle());
+                float py = power * MathUtils.cos(-body.getAngle());
+                float dx = x - (width / 4f * SQRT5) * MathUtils.sin(-body.getAngle() - MathUtils.PI / 8f);
+                float dy = y - (height / 4f * SQRT5) * MathUtils.cos(-body.getAngle() - MathUtils.PI / 8f);
+
+                body.applyLinearImpulse(px, py, dx, dy, true);
+            }
+            else {
+                right_throttle = false;
+            }
         }
         else {
-            left_throttle = false;
-        }
-        
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            right_throttle = true;
-            float px = power * MathUtils.sin(-body.getAngle());
-            float py = power * MathUtils.cos(-body.getAngle());
-            float dx = x - (width / 4f * SQRT5) * MathUtils.sin(-body.getAngle() - MathUtils.PI / 8f);
-            float dy = y - (height / 4f * SQRT5) * MathUtils.cos(-body.getAngle() - MathUtils.PI / 8f);
-            
-            body.applyLinearImpulse(px, py, dx, dy, true);
-        }
-        else {
-            right_throttle = false;
+            // player is dead
+            float vx = body.getLinearVelocity().x / 2f;
+            float vy = body.getLinearVelocity().y / 2f;
+            body.setLinearVelocity(vx, vy);
         }
         
         // limit player's speed
@@ -84,6 +103,13 @@ public class Player extends Actor {
             body.setLinearDamping(0);
         }
         
+        // player explodes
+        if (alive && (body.getPosition().x < 0.2 || body.getPosition().x > 19.8)) {
+            alive = false;
+            Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
+            ActorBuilder.createExplodeEffect(x, y, particleEffects);
+        }
+        
         x = body.getPosition().x;
         y = body.getPosition().y;
         sprite.setPosition(x - width / 2, y - height / 2);
@@ -95,6 +121,11 @@ public class Player extends Actor {
 
     @Override
     public void render(SpriteBatch batch) {
+        
+        if (!alive) {
+            return;
+        }
+        
         if (left_throttle) {
             flame.setPosition(x - width / 2, y - height);
             flame.setOrigin(width / 2, height);

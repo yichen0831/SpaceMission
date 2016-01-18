@@ -2,6 +2,7 @@ package com.ychstudio.gamesys;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -9,8 +10,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.ychstudio.actors.Ground;
 import com.ychstudio.actors.Player;
+import com.ychstudio.screens.PlayScreen;
 
 public class ActorBuilder {
     private static ActorBuilder instance = new ActorBuilder();
@@ -56,7 +59,7 @@ public class ActorBuilder {
         return ground;
     }
     
-    public static Player createPlayer(float x, float y) {
+    public static Player createPlayer(PlayScreen playScreen, float x, float y) {
         World world = instance.world;
         AssetManager assetManager = instance.assetManager;
         Texture spaceShipTexture = assetManager.get("images/SpaceShip.png", Texture.class);
@@ -91,10 +94,19 @@ public class ActorBuilder {
         body.createFixture(fixtureDef);
         shape.dispose();
         
-        Player player = new Player(body, sprite, width ,height);
+        Player player = new Player(playScreen, body, sprite, width ,height);
         body.setUserData(player);
         
         return player;
     }
-
+    
+    public static ParticleEffect createExplodeEffect(float x, float y, Array<ParticleEffect> particleEffects) {
+        ParticleEffect effect = GM.getAssetManager().get("particles/explode.particle", ParticleEffect.class);
+        effect.setPosition(x, y);
+        effect.reset();
+        if (particleEffects != null) {
+            particleEffects.add(effect);
+        }
+        return effect;
+    }
 }
