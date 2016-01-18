@@ -48,10 +48,7 @@ public class Player extends Actor {
     	// TODO remove this code
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             // reset player
-            body.setLinearVelocity(0, 0);
-            body.setTransform(10f, 2.5f, 0);
-            body.setAngularVelocity(0);
-            alive = true;
+            restart();
         }
         
         if (alive) {
@@ -139,6 +136,18 @@ public class Player extends Actor {
             flame.draw(batch);
         }
         sprite.draw(batch);
+    }
+    
+    public boolean isPlayerAlive() {
+        return alive;
+    }
+    
+    public void restart() {
+        // reset player
+        body.setLinearVelocity(0, 0);
+        body.setTransform(10f, 2.5f, 0);
+        body.setAngularVelocity(0);
+        alive = true;
     }
     
     public float getSpeed() {

@@ -37,6 +37,9 @@ public class PlayScreen implements Screen{
     private Label playerSpeedLabel;
     private Label playerPositionLabel;
     private Label playerPauseLabel;
+    private Label gameOverLabel;
+    
+    private float gameOverCountDown = 1.0f;
     
     private FitViewport viewport;
     private OrthographicCamera camera;
@@ -73,9 +76,17 @@ public class PlayScreen implements Screen{
         playerPauseLabel.setPosition((Gdx.graphics.getWidth() - playerPauseLabel.getWidth()) / 2,
                                         (Gdx.graphics.getHeight() - playerPauseLabel.getHeight()) / 2);
         playerPauseLabel.setVisible(false);
+        
+        gameOverLabel = new Label("Game Over\npress Enter to restart", VisUI.getSkin());
+        gameOverLabel.setAlignment(Align.center);
+        gameOverLabel.setPosition((Gdx.graphics.getWidth() - gameOverLabel.getWidth()) / 2,
+                                    (Gdx.graphics.getHeight() - gameOverLabel.getHeight()) / 2);
+        gameOverLabel.setVisible(false);
+        
         stage.addActor(playerSpeedLabel);
         stage.addActor(playerPositionLabel);
         stage.addActor(playerPauseLabel);
+        stage.addActor(gameOverLabel);
         
         camera = new OrthographicCamera();
         viewport = new FitViewport(WIDTH, HEIGHT, camera);
@@ -119,6 +130,17 @@ public class PlayScreen implements Screen{
         playerSpeedLabel.setText(String.format("Speed: %.2f", player.getSpeed()));
         playerPositionLabel.setText(String.format("Pos: %.2f, %.2f", player.getPosition().x, player.getPosition().y));
         
+        
+        if (!player.isPlayerAlive()) {
+            gameOverCountDown -= delta;
+            if (gameOverCountDown <= 0) {
+                gameOverLabel.setVisible(true);
+            }
+        }
+        else {
+            gameOverLabel.setVisible(false);
+        }
+        
         float target_zoom = camera.zoom;
         if (player.getPosition().y < GM.SKY_LINE) {
             target_zoom = 0.4f;
@@ -142,8 +164,20 @@ public class PlayScreen implements Screen{
     public void inputHandle(float delta) {
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            player_paused = !player_paused;
-            playerPauseLabel.setVisible(player_paused);
+            if (player.isPlayerAlive()) {
+                player_paused = !player_paused;
+                playerPauseLabel.setVisible(player_paused);
+            }
+            else {
+                game.backToMenu();
+            }
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (!player.isPlayerAlive()) {
+                player.restart();
+                gameOverCountDown = 1.0f;
+            }
         }
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
@@ -168,7 +202,6 @@ public class PlayScreen implements Screen{
         
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
         
         camera.update();
         batch.setProjectionMatrix(camera.combined);
