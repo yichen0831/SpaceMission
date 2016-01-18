@@ -141,21 +141,23 @@ public class PlayScreen implements Screen{
             gameOverLabel.setVisible(false);
         }
         
-        float target_zoom = camera.zoom;
+        float target_zoom;
+        float target_y;
         if (player.getPosition().y < GM.SKY_LINE) {
             target_zoom = 0.4f;
             if (player.getPosition().y < 6.0f) {
-                camera.position.y = 6;
+                target_y = 6;
             }
             else {
-                camera.position.y = player.getPosition().y;
+                target_y = player.getPosition().y;
             }
         }
         else {
             target_zoom = MathUtils.clamp(player.getSpeed() / 10f, 0.9f, 1.0f);
-            camera.position.y = player.getPosition().y;
+            target_y = player.getPosition().y + HEIGHT / 4f;
         }
-        
+
+        camera.position.y = MathUtils.lerp(camera.position.y, target_y, 0.1f);
         camera.zoom = MathUtils.lerp(camera.zoom, target_zoom, 0.1f);
         
         background.update(player.getPosition());
