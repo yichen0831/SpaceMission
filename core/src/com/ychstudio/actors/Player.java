@@ -28,8 +28,6 @@ public class Player extends Actor {
     
     private boolean alive;
     
-    private static final float SQRT5 = (float) Math.sqrt(5.0);
-
     private final Vector2 tmpV = new Vector2();
 
     public Player(PlayScreen playScreen, Body body, Sprite sprite, float width, float height) {
@@ -48,11 +46,6 @@ public class Player extends Actor {
 
     @Override
     public void update(float delta) {
-    	// TODO remove this code
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            // reset player
-            restart();
-        }
         
         if (alive) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -107,9 +100,7 @@ public class Player extends Actor {
         if (alive) {
             if ((body.getPosition().y < GM.SKY_LINE && (body.getPosition().x < 5.5f || body.getPosition().x > 14.5f))
                     || (body.getPosition().x < 0.2 || body.getPosition().x > 19.8)) {
-                alive = false;
-                Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
-                ActorBuilder.createExplodeEffect(x, y, particleEffects);
+                explode();
             }
         }
         
@@ -148,12 +139,24 @@ public class Player extends Actor {
         return alive;
     }
     
+    public void explode() {
+        alive = false;
+        Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
+        ActorBuilder.createExplodeEffect(x, y, particleEffects);
+    }
+    
     public void restart() {
         // reset player
         body.setLinearVelocity(0, 0);
         body.setTransform(10f, 2.5f, 0);
         body.setAngularVelocity(0);
         alive = true;
+    }
+    
+    public void hitGround() {
+        if (Math.abs(MathUtils.radDeg * body.getAngle()) >= 90f || getSpeed() > 10f) {
+            explode();
+        }
     }
     
     public float getSpeed() {

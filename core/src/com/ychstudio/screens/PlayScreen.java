@@ -24,6 +24,7 @@ import com.ychstudio.actors.Player;
 import com.ychstudio.background.Background;
 import com.ychstudio.gamesys.ActorBuilder;
 import com.ychstudio.gamesys.GM;
+import com.ychstudio.gamesys.WorldContactListener;
 
 
 public class PlayScreen implements Screen{
@@ -46,7 +47,7 @@ public class PlayScreen implements Screen{
     
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
-    private boolean showBox2DDebugRenderer = true;
+    private boolean showBox2DDebugRenderer = false;
     
     private boolean paused;
     private boolean player_paused;
@@ -92,7 +93,9 @@ public class PlayScreen implements Screen{
         viewport = new FitViewport(WIDTH, HEIGHT, camera);
         camera.zoom = 0.4f;
         camera.translate(WIDTH/2, HEIGHT/2 * camera.zoom);
+        
         world = new World(new Vector2(0, -20f), true);
+        world.setContactListener(new WorldContactListener());
         box2DDebugRenderer = new Box2DDebugRenderer();
         
         actors = new Array<>();
