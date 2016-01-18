@@ -23,11 +23,14 @@ public class Player extends Actor {
     private boolean left_throttle;
     private boolean right_throttle;
     private float rotation;
-    private float power = 0.8f;
+    private float torque = 2.4f;
+    private float force = 1.6f;
     
     private boolean alive;
     
     private static final float SQRT5 = (float) Math.sqrt(5.0);
+
+    private final Vector2 tmpV = new Vector2();
 
     public Player(PlayScreen playScreen, Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
@@ -53,29 +56,29 @@ public class Player extends Actor {
         
         if (alive) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                left_throttle = true;
-                float px = power * MathUtils.sin(-body.getAngle());
-                float py = power * MathUtils.cos(-body.getAngle());
-                float dx = x - (width / 4f * SQRT5) * MathUtils.sin(-body.getAngle() + MathUtils.PI / 8f);
-                float dy = y - (height / 4f * SQRT5) * MathUtils.cos(-body.getAngle() + MathUtils.PI / 8f);
+                right_throttle = true;
+            }
+            else {
+                right_throttle = false;
+            }
 
-                body.applyLinearImpulse(px, py, dx, dy, true);
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                left_throttle = true;
             }
             else {
                 left_throttle = false;
             }
 
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                right_throttle = true;
-                float px = power * MathUtils.sin(-body.getAngle());
-                float py = power * MathUtils.cos(-body.getAngle());
-                float dx = x - (width / 4f * SQRT5) * MathUtils.sin(-body.getAngle() - MathUtils.PI / 8f);
-                float dy = y - (height / 4f * SQRT5) * MathUtils.cos(-body.getAngle() - MathUtils.PI / 8f);
-
-                body.applyLinearImpulse(px, py, dx, dy, true);
+            if (left_throttle && right_throttle) {
+                float px = force * MathUtils.sin(-body.getAngle());
+                float py = force * MathUtils.cos(-body.getAngle());
+                body.applyLinearImpulse(tmpV.set(px, py), body.getWorldCenter(), true);
             }
-            else {
-                right_throttle = false;
+            else if (left_throttle) {
+                body.applyTorque(-torque, true);
+            }
+            else if (right_throttle) {
+                body.applyTorque(torque, true);
             }
         }
         else {
