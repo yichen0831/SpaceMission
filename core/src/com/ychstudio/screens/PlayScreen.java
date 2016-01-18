@@ -226,6 +226,10 @@ public class PlayScreen implements Screen{
     public Array<ParticleEffect> getParticleEffectArray() {
         return particleEffects;
     }
+    
+    public float getCameraZoom() {
+        return camera.zoom;
+    }
 
     @Override
     public void resize(int width, int height) {

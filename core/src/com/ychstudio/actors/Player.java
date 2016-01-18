@@ -101,10 +101,13 @@ public class Player extends Actor {
         }
         
         // player explodes
-        if (alive && (body.getPosition().x < 0.2 || body.getPosition().x > 19.8)) {
-            alive = false;
-            Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
-            ActorBuilder.createExplodeEffect(x, y, particleEffects);
+        if (alive) {
+            if ((body.getPosition().y < GM.SKY_LINE && (body.getPosition().x < 5.5f || body.getPosition().x > 14.5f))
+                    || (body.getPosition().x < 0.2 || body.getPosition().x > 19.8)) {
+                alive = false;
+                Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
+                ActorBuilder.createExplodeEffect(x, y, particleEffects);
+            }
         }
         
         x = body.getPosition().x;
