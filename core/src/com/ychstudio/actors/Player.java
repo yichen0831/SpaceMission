@@ -2,10 +2,7 @@ package com.ychstudio.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -30,10 +27,15 @@ public class Player extends Actor {
     
     private final Vector2 tmpV = new Vector2();
 
+    public Player(PlayScreen playScreen, Body body, TextureRegion textureRegion, float width, float height) {
+        this(playScreen, body, new Sprite(textureRegion), width, height);
+    }
+
     public Player(PlayScreen playScreen, Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
         this.playScreen = playScreen;
-        flame = new Sprite(GM.getAssetManager().get("images/Flame.png", Texture.class));
+        TextureRegion textureRegion = GM.getAssetManager().get("images/actors.pack", TextureAtlas.class).findRegion("Flame");
+        flame = new Sprite(textureRegion);
         flame.setSize(width / 2f, height);
         
         left_throttle = false;

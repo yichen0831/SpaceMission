@@ -107,7 +107,7 @@ public class PlayScreen implements Screen{
         
         Ground ground = ActorBuilder.createGround(WIDTH/2, 1f);
         actors.add(ground);
-        
+
         particleEffects = new Array<>();
         
         background = new Background(batch, WIDTH, HEIGHT);

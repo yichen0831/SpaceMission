@@ -4,9 +4,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
+import com.ychstudio.actors.Asteroid;
 import com.ychstudio.actors.Ground;
 import com.ychstudio.actors.Player;
 import com.ychstudio.screens.PlayScreen;
@@ -54,15 +58,47 @@ public class ActorBuilder {
         
         return ground;
     }
-    
+
+    public static Asteroid createAsteroid(float x, float y, String color, int size) {
+        size = MathUtils.clamp(size, 1, 6);
+        float asteroid_size = MathUtils.clamp(size, 2, 6) / 2f;
+        color = color.toLowerCase().startsWith("r") ? "r" : "b";
+        World world = instance.world;
+        AssetManager assetManager = instance.assetManager;
+        TextureAtlas textureAtlas = assetManager.get("images/actors.pack", TextureAtlas.class);
+        TextureRegion textureRegion = textureAtlas.findRegion("asteroid_" + color + size);
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.DynamicBody;
+        bodyDef.position.set(x, y);
+        bodyDef.gravityScale = 0;
+
+        Body body = world.createBody(bodyDef);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(asteroid_size / 3f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.5f;
+        fixtureDef.filter.categoryBits = GM.ASTEROID_CATEGORY_BITS;
+        fixtureDef.filter.maskBits = GM.ASTEROID_MASK_BITS;
+
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        Asteroid asteroid = new Asteroid(body, textureRegion, asteroid_size, asteroid_size);
+        body.setUserData(asteroid);
+        return asteroid;
+    }
+
     public static Player createPlayer(PlayScreen playScreen, float x, float y) {
         World world = instance.world;
         AssetManager assetManager = instance.assetManager;
-        Texture spaceShipTexture = assetManager.get("images/SpaceShip.png", Texture.class);
-        spaceShipTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        
-        Sprite sprite = new Sprite(spaceShipTexture);
-        
+        TextureAtlas textureAtlas = assetManager.get("images/actors.pack", TextureAtlas.class);
+        TextureRegion spaceShipTextureRegion = textureAtlas.findRegion("SpaceShip");
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -90,7 +126,7 @@ public class ActorBuilder {
         body.createFixture(fixtureDef);
         shape.dispose();
         
-        Player player = new Player(playScreen, body, sprite, width ,height);
+        Player player = new Player(playScreen, body, spaceShipTextureRegion, width ,height);
         body.setUserData(player);
         
         return player;

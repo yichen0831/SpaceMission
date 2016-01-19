@@ -1,0 +1,103 @@
+
+actors.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+asteroid_r6
+  rotate: false
+  xy: 1, 159
+  size: 99, 96
+  orig: 99, 96
+  offset: 0, 0
+  index: -1
+asteroid_b6
+  rotate: false
+  xy: 1, 61
+  size: 99, 96
+  orig: 99, 96
+  offset: 0, 0
+  index: -1
+asteroid_b4
+  rotate: false
+  xy: 1, 1
+  size: 72, 58
+  orig: 72, 58
+  offset: 0, 0
+  index: -1
+asteroid_r4
+  rotate: false
+  xy: 75, 1
+  size: 72, 58
+  orig: 72, 58
+  offset: 0, 0
+  index: -1
+asteroid_b5
+  rotate: false
+  xy: 102, 192
+  size: 74, 63
+  orig: 74, 63
+  offset: 0, 0
+  index: -1
+asteroid_r5
+  rotate: false
+  xy: 102, 132
+  size: 62, 58
+  orig: 62, 58
+  offset: 0, 0
+  index: -1
+asteroid_b3
+  rotate: false
+  xy: 178, 205
+  size: 57, 50
+  orig: 57, 50
+  offset: 0, 0
+  index: -1
+asteroid_r3
+  rotate: false
+  xy: 102, 81
+  size: 56, 49
+  orig: 56, 49
+  offset: 0, 0
+  index: -1
+SpaceShip
+  rotate: false
+  xy: 178, 162
+  size: 48, 41
+  orig: 48, 41
+  offset: 0, 0
+  index: -1
+asteroid_b2
+  rotate: false
+  xy: 166, 118
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
+asteroid_r2
+  rotate: false
+  xy: 160, 74
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
+Flame
+  rotate: false
+  xy: 210, 117
+  size: 23, 43
+  orig: 23, 43
+  offset: 0, 0
+  index: -1
+asteroid_b1
+  rotate: false
+  xy: 204, 77
+  size: 37, 38
+  orig: 37, 38
+  offset: 0, 0
+  index: -1
+asteroid_r1
+  rotate: false
+  xy: 149, 34
+  size: 37, 38
+  orig: 37, 38
+  offset: 0, 0
+  index: -1
