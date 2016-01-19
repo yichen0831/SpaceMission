@@ -44,6 +44,9 @@ public class GM {
         assetManager.load("images/Moon.png", Texture.class);
         assetManager.load("images/Earth.png", Texture.class);
         assetManager.load("particles/explode.particle", ParticleEffect.class);
+        assetManager.load("particles/asteroid_explode.particle", ParticleEffect.class);
+        assetManager.load("particles/asteroid_explode_small.particle", ParticleEffect.class);
+        assetManager.load("particles/asteroid_explode_medium.particle", ParticleEffect.class);
         assetManager.finishLoading();
     }
 }

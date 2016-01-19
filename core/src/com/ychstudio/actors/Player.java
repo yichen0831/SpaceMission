@@ -22,6 +22,8 @@ public class Player extends Actor {
     private float rotation;
     private float torque = 2.4f;
     private float force = 1.6f;
+
+    private float hp;
     
     private boolean alive;
     
@@ -42,7 +44,8 @@ public class Player extends Actor {
         right_throttle = false;
         
         rotation = 0;
-        
+
+        hp = 10f;
         alive = true;
     }
 
@@ -100,8 +103,7 @@ public class Player extends Actor {
         
         // player explodes
         if (alive) {
-            if ((body.getPosition().y < GM.SKY_LINE && (body.getPosition().x < 5.5f || body.getPosition().x > 14.5f))
-                    || (body.getPosition().x < 0.2 || body.getPosition().x > 19.8)) {
+            if (isOutOfBound() || hp < 0) {
                 explode();
             }
         }
@@ -140,6 +142,11 @@ public class Player extends Actor {
     public boolean isPlayerAlive() {
         return alive;
     }
+
+    public boolean isOutOfBound() {
+        return (body.getPosition().y < GM.SKY_LINE && (body.getPosition().x < 5.5f || body.getPosition().x > 14.5f))
+                || (body.getPosition().x < 0.2 || body.getPosition().x > 19.8);
+    }
     
     public void explode() {
         alive = false;
@@ -152,6 +159,7 @@ public class Player extends Actor {
         body.setLinearVelocity(0, 0);
         body.setTransform(10f, 2.5f, 0);
         body.setAngularVelocity(0);
+        hp = 10f;
         alive = true;
     }
     
@@ -159,6 +167,14 @@ public class Player extends Actor {
         if (Math.abs(MathUtils.radDeg * body.getAngle()) >= 90f || getSpeed() > 10f) {
             explode();
         }
+    }
+
+    public float getHp() {
+        return hp;
+    }
+
+    public void getDamaged(float damage) {
+        hp -= damage;
     }
     
     public float getSpeed() {

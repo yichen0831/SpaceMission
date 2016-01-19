@@ -13,6 +13,8 @@ public abstract class Actor {
     Body body;
     Sprite sprite;
 
+    public boolean toBeRemoved;
+
     public Actor(Body body, Texture texture, float width, float height) {
         this(body, new Sprite(texture), width, height);
     }
@@ -31,6 +33,8 @@ public abstract class Actor {
         this.sprite = sprite;
         this.sprite.setBounds(x - width/2, y - height/2, width, height);
         this.sprite.setOriginCenter();
+
+        toBeRemoved = false;
     }
     
     public abstract void update(float delta);

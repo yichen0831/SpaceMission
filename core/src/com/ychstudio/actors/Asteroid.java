@@ -8,12 +8,25 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Asteroid extends Actor {
 
+    float damage;
+
     public Asteroid(Body body, TextureRegion textureRegion, float width, float height) {
         this(body, new Sprite(textureRegion), width, height);
     }
 
     public Asteroid(Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
+        damage = width;
+    }
+
+    public float getDamage() {
+        return damage;
+    }
+
+    public void explode() {
+        // TODO explosion animation
+
+        toBeRemoved = true;
     }
 
     @Override

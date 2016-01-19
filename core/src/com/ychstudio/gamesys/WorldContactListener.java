@@ -1,10 +1,7 @@
 package com.ychstudio.gamesys;
 
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.*;
+import com.ychstudio.actors.Asteroid;
 import com.ychstudio.actors.Player;
 
 public class WorldContactListener implements ContactListener{
@@ -24,6 +21,11 @@ public class WorldContactListener implements ContactListener{
                     case GM.GROUND_CATEGORY_BITS:
                         player.hitGround();
                         break;
+                    case GM.ASTEROID_CATEGORY_BITS:
+                        Asteroid asteroid = (Asteroid) fixtureB.getBody().getUserData();
+                        asteroid.explode();
+                        player.getDamaged(asteroid.getDamage());
+                        break;
                 }
                 
             }
@@ -33,6 +35,11 @@ public class WorldContactListener implements ContactListener{
                 switch(categoryBitsA) {
                     case GM.GROUND_CATEGORY_BITS:
                         player.hitGround();
+                        break;
+                    case GM.ASTEROID_CATEGORY_BITS:
+                        Asteroid asteroid = (Asteroid) fixtureA.getBody().getUserData();
+                        asteroid.explode();
+                        player.getDamaged(asteroid.getDamage());
                         break;
                 }
 

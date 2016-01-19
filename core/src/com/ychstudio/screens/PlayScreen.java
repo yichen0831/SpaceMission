@@ -164,6 +164,8 @@ public class PlayScreen implements Screen{
         camera.zoom = MathUtils.lerp(camera.zoom, target_zoom, 0.1f);
         
         background.update(player.getPosition());
+
+        // TODO make restart function
     }
     
     public void inputHandle(float delta) {

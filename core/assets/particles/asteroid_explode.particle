@@ -2,39 +2,31 @@ Untitled
 - Delay -
 active: false
 - Duration - 
-lowMin: 500.0
-lowMax: 500.0
+lowMin: 300.0
+lowMax: 300.0
 - Count - 
 min: 0
-max: 50
+max: 20
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 60.0
-highMax: 60.0
+highMin: 50.0
+highMax: 50.0
 relative: false
-scalingCount: 3
-scaling0: 0.29090908
-scaling1: 0.9818182
-scaling2: 0.36363637
-timelineCount: 3
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
 timeline0: 0.0
-timeline1: 0.46575344
-timeline2: 1.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 600.0
-highMax: 600.0
+highMin: 300.0
+highMax: 300.0
 relative: false
-scalingCount: 3
-scaling0: 0.6909091
-scaling1: 1.0
-scaling2: 1.0
-timelineCount: 3
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
 timeline0: 0.0
-timeline1: 0.47945204
-timeline2: 1.0
 - Life Offset - 
 active: false
 - X Offset - 
@@ -66,21 +58,19 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 1.2
-highMax: 1.8
+highMin: 0.8
+highMax: 1.0
 relative: false
-scalingCount: 2
+scalingCount: 1
 scaling0: 1.0
-scaling1: 1.0
-timelineCount: 2
+timelineCount: 1
 timeline0: 0.0
-timeline1: 1.0
 - Velocity - 
 active: true
 lowMin: 0.0
 lowMax: 0.0
 highMin: 0.2
-highMax: 0.8
+highMax: 0.3
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -106,8 +96,8 @@ active: false
 - Tint - 
 colorsCount: 3
 colors0: 1.0
-colors1: 0.15294118
-colors2: 0.09803922
+colors1: 0.39215687
+colors2: 0.27450982
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -117,13 +107,13 @@ highMin: 1.0
 highMax: 1.0
 relative: false
 scalingCount: 3
-scaling0: 0.6315789
-scaling1: 0.9298246
-scaling2: 0.7017544
+scaling0: 0.3508772
+scaling1: 0.8947368
+scaling2: 0.19298245
 timelineCount: 3
 timeline0: 0.0
-timeline1: 0.29452056
-timeline2: 1.0
+timeline1: 0.20547946
+timeline2: 0.96575344
 - Options - 
 attached: false
 continuous: false
@@ -132,4 +122,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-Sun.png
+RedStar.png

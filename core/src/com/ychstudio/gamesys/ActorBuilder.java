@@ -141,4 +141,28 @@ public class ActorBuilder {
         }
         return effect;
     }
+
+    public static ParticleEffect createAsteroidExplodeEffect(float x, float y, Array<ParticleEffect> particleEffects, int size) {
+        ParticleEffect effect;
+
+        switch(size) {
+            case 1:
+                effect = GM.getAssetManager().get("particles/explode_small.particle", ParticleEffect.class);
+                break;
+            case 2:
+                effect = GM.getAssetManager().get("particles/explode_medium.particle", ParticleEffect.class);
+                break;
+            case 3:
+            default:
+                effect = GM.getAssetManager().get("particles/explode.particle", ParticleEffect.class);
+                break;
+        }
+
+        effect.setPosition(x, y);
+        effect.reset();
+        if (particleEffects != null) {
+            particleEffects.add(effect);
+        }
+        return effect;
+    }
 }
