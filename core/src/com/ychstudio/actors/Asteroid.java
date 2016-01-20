@@ -5,17 +5,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ychstudio.gamesys.ActorBuilder;
+import com.ychstudio.screens.PlayScreen;
 
 public class Asteroid extends Actor {
 
-    float damage;
+    private PlayScreen playScreen;
+    private float damage;
 
-    public Asteroid(Body body, TextureRegion textureRegion, float width, float height) {
-        this(body, new Sprite(textureRegion), width, height);
+    public Asteroid(PlayScreen playScreen, Body body, TextureRegion textureRegion, float width, float height) {
+        this(playScreen, body, new Sprite(textureRegion), width, height);
     }
 
-    public Asteroid(Body body, Sprite sprite, float width, float height) {
+    public Asteroid(PlayScreen playScreen, Body body, Sprite sprite, float width, float height) {
         super(body, sprite, width, height);
+        this.playScreen = playScreen;
         damage = width;
     }
 
@@ -24,8 +28,7 @@ public class Asteroid extends Actor {
     }
 
     public void explode() {
-        // TODO explosion animation
-
+        ActorBuilder.createAsteroidExplodeEffect(body.getPosition().x, body.getPosition().y, playScreen.getParticleEffectArray(), MathUtils.ceil(damage));
         toBeRemoved = true;
     }
 

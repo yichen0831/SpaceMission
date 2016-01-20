@@ -3,10 +3,15 @@ package com.ychstudio.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -58,6 +63,8 @@ public class PlayScreen implements Screen{
     private Array<ParticleEffect> particleEffects;
     
     private Background background;
+
+    private BitmapFont monoFont24;
     
     public PlayScreen(SpaceRocket game) {
         this.game = game;
@@ -66,19 +73,30 @@ public class PlayScreen implements Screen{
     @Override
     public void show() {
         batch = new SpriteBatch();
-        
+
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/MONOFONT.TTF"));
+        FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
+        fontParameter.size = 24;
+        fontParameter.magFilter = Texture.TextureFilter.Linear;
+        fontParameter.minFilter = Texture.TextureFilter.Linear;
+
+        monoFont24 = fontGenerator.generateFont(fontParameter);
+        fontGenerator.dispose();
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle(monoFont24, Color.WHITE);
+
         stage = new Stage();
         playerSpeedLabel = new Label("Speed:", VisUI.getSkin());
         playerSpeedLabel.setPosition(6f, Gdx.graphics.getHeight() - 22f);
         playerPositionLabel = new Label("Pos:", VisUI.getSkin());
         playerPositionLabel.setPosition(6f, Gdx.graphics.getHeight() - 42f);
-        playerPauseLabel = new Label("Paused\npress Y to go back to menu", VisUI.getSkin());
+        playerPauseLabel = new Label("Paused\npress Y to go back to menu", labelStyle);
         playerPauseLabel.setAlignment(Align.center);
         playerPauseLabel.setPosition((Gdx.graphics.getWidth() - playerPauseLabel.getWidth()) / 2,
                                         (Gdx.graphics.getHeight() - playerPauseLabel.getHeight()) / 2);
         playerPauseLabel.setVisible(false);
         
-        gameOverLabel = new Label("Game Over\npress Enter to restart", VisUI.getSkin());
+        gameOverLabel = new Label("Game Over\npress Enter to restart", labelStyle);
         gameOverLabel.setAlignment(Align.center);
         gameOverLabel.setPosition((Gdx.graphics.getWidth() - gameOverLabel.getWidth()) / 2,
                                     (Gdx.graphics.getHeight() - gameOverLabel.getHeight()) / 2);
@@ -119,11 +137,14 @@ public class PlayScreen implements Screen{
     
     public void update(float delta) {
         world.step(1f / 60.0f, 8, 3);
-        
-        for (Actor actor : actors) {
-            actor.update(delta);
+
+        for (int i = actors.size - 1; i >=0; i--) {
+            actors.get(i).update(delta);
+            if (actors.get(i).toBeRemoved) {
+                actors.removeIndex(i);
+            }
         }
-        
+
         for (int i = particleEffects.size - 1; i >= 0; i--) {
             if (particleEffects.get(i).isComplete()) {
                 particleEffects.removeIndex(i);
@@ -264,5 +285,6 @@ public class PlayScreen implements Screen{
         box2DDebugRenderer.dispose();
         batch.dispose();
         stage.dispose();
+        monoFont24.dispose();
     }
 }

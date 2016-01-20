@@ -59,7 +59,7 @@ public class ActorBuilder {
         return ground;
     }
 
-    public static Asteroid createAsteroid(float x, float y, String color, int size) {
+    public static Asteroid createAsteroid(PlayScreen playScreen, float x, float y, String color, int size) {
         size = MathUtils.clamp(size, 1, 6);
         float asteroid_size = MathUtils.clamp(size, 2, 6) / 2f;
         color = color.toLowerCase().startsWith("r") ? "r" : "b";
@@ -88,7 +88,7 @@ public class ActorBuilder {
 
         shape.dispose();
 
-        Asteroid asteroid = new Asteroid(body, textureRegion, asteroid_size, asteroid_size);
+        Asteroid asteroid = new Asteroid(playScreen, body, textureRegion, asteroid_size, asteroid_size);
         body.setUserData(asteroid);
         return asteroid;
     }
@@ -147,14 +147,14 @@ public class ActorBuilder {
 
         switch(size) {
             case 1:
-                effect = GM.getAssetManager().get("particles/explode_small.particle", ParticleEffect.class);
+                effect = GM.getAssetManager().get("particles/asteroid_explode_small.particle", ParticleEffect.class);
                 break;
             case 2:
-                effect = GM.getAssetManager().get("particles/explode_medium.particle", ParticleEffect.class);
+                effect = GM.getAssetManager().get("particles/asteroid_explode_medium.particle", ParticleEffect.class);
                 break;
             case 3:
             default:
-                effect = GM.getAssetManager().get("particles/explode.particle", ParticleEffect.class);
+                effect = GM.getAssetManager().get("particles/asteroid_explode.particle", ParticleEffect.class);
                 break;
         }
 

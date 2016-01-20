@@ -35,8 +35,11 @@ public class MenuScreen implements Screen {
 
     private AssetManager assetManager;
 
+    private BitmapFont monoFont30;
+    private BitmapFont monoFont64;
+
     private boolean paused;
-    
+
     public MenuScreen(SpaceRocket game) {
         this.game = game;
         assetManager = GM.getAssetManager();
@@ -48,14 +51,16 @@ public class MenuScreen implements Screen {
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/MONOFONT.TTF"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.magFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
         parameter.size = 30;
-        BitmapFont monoFont30 = generator.generateFont(parameter);
+        monoFont30 = generator.generateFont(parameter);
 
         parameter.size = 64;
         parameter.color = new Color(0.8f, 0.8f, 0.8f, 1.0f);
         parameter.borderWidth = 2.8f;
         parameter.borderColor = new Color(0.6f, 0.6f, 0.6f, 1.0f);
-        BitmapFont monoFont64 = generator.generateFont(parameter);
+        monoFont64 = generator.generateFont(parameter);
         generator.dispose();
 
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -149,6 +154,8 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        monoFont30.dispose();
+        monoFont64.dispose();
         stage.dispose();
         batch.dispose();
         
