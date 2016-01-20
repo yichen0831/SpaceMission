@@ -30,6 +30,7 @@ import com.ychstudio.background.Background;
 import com.ychstudio.gamesys.ActorBuilder;
 import com.ychstudio.gamesys.GM;
 import com.ychstudio.gamesys.WorldContactListener;
+import com.ychstudio.screens.huds.StatusHud;
 
 
 public class PlayScreen implements Screen{
@@ -67,6 +68,8 @@ public class PlayScreen implements Screen{
     private Background background;
 
     private BitmapFont monoFont24;
+    
+    private StatusHud statusHud;
     
     public PlayScreen(SpaceRocket game) {
         this.game = game;
@@ -134,6 +137,8 @@ public class PlayScreen implements Screen{
         gameRestart();
 
         background = new Background(batch, WIDTH, HEIGHT);
+        
+        statusHud = new StatusHud();
         
         paused = false;
         player_paused = false;
@@ -253,6 +258,7 @@ public class PlayScreen implements Screen{
         ground.render(batch);
         batch.end();
         
+        statusHud.render();
         stage.draw();
         
         if (showBox2DDebugRenderer) {
@@ -309,6 +315,7 @@ public class PlayScreen implements Screen{
         box2DDebugRenderer.dispose();
         batch.dispose();
         stage.dispose();
+        statusHud.dispose();
         monoFont24.dispose();
     }
 }

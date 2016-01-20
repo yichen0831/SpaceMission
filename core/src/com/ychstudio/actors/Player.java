@@ -2,7 +2,11 @@ package com.ychstudio.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,8 +18,6 @@ import com.ychstudio.screens.PlayScreen;
 
 public class Player extends Actor {
     
-    public static final float MAX_SPEED = 20.0f;
-    
     private PlayScreen playScreen;
     private Sprite flame;
     private boolean left_throttle;
@@ -24,7 +26,12 @@ public class Player extends Actor {
     private float torque = 2.4f;
     private float force = 1.6f;
 
+    private float maxSpeed = 20f;
+    private float speed;
+    private float maxHp = 10f;
     private float hp;
+    
+    private float goalY = 1000f; // the y position of the goal
     
     private boolean alive;
     
@@ -46,7 +53,8 @@ public class Player extends Actor {
         
         rotation = 0;
 
-        hp = 10f;
+        hp = maxHp;
+        speed = 0;
         alive = true;
     }
 
@@ -88,8 +96,8 @@ public class Player extends Actor {
         }
         
         // limit player's speed
-        if (body.getLinearVelocity().len2() > MAX_SPEED * MAX_SPEED) {
-            body.setLinearVelocity(body.getLinearVelocity().nor().scl(MAX_SPEED));
+        if (body.getLinearVelocity().len2() > maxSpeed * maxSpeed) {
+            body.setLinearVelocity(body.getLinearVelocity().nor().scl(maxSpeed));
         }
         
         // when player enters the space
@@ -115,6 +123,10 @@ public class Player extends Actor {
         
         rotation = MathUtils.radiansToDegrees * body.getAngle();
         sprite.setRotation(rotation);
+        
+        float vx = body.getLinearVelocity().x;
+        float vy = body.getLinearVelocity().y;
+        speed = (float) Math.sqrt(vx * vx + vy * vy);
         
     }
 
@@ -166,7 +178,7 @@ public class Player extends Actor {
         body.setLinearVelocity(0, 0);
         body.setTransform(10f, 2.5f, 0);
         body.setAngularVelocity(0);
-        hp = 10f;
+        hp = maxHp;
         alive = true;
     }
     
@@ -179,15 +191,25 @@ public class Player extends Actor {
     public float getHp() {
         return hp;
     }
+    
+    public float getHpRatio() {
+        return hp / maxHp;
+    }
+    
+    public float getSpeedRatio() {
+        return speed / maxSpeed;
+    }
+    
+    public float getProgress() {
+        return y / goalY;
+    }
 
     public void getDamaged(float damage) {
         hp -= damage;
     }
     
     public float getSpeed() {
-        float x = body.getLinearVelocity().x;
-        float y = body.getLinearVelocity().y;
-        return (float) Math.sqrt(x * x + y * y);
+        return speed;
     }
     
     public Vector2 getPosition() {
