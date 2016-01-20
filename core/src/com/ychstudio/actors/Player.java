@@ -162,10 +162,13 @@ public class Player extends Actor {
     }
     
     public void explode() {
+        hp = 0;
         alive = false;
         Filter filter = body.getFixtureList().get(0).getFilterData();
         filter.categoryBits = GM.NOTHING_CATEGORY_BITS;
         body.getFixtureList().get(0).setFilterData(filter);
+        body.setGravityScale(0);
+        body.setLinearVelocity(0, 0);
         Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
         ActorBuilder.createExplodeEffect(x, y, particleEffects);
     }

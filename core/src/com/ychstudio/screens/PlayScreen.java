@@ -47,6 +47,8 @@ public class PlayScreen implements Screen{
     private Label playerPauseLabel;
     private Label gameOverLabel;
     
+    private boolean showPlayerInfo = false;
+    
     private float gameOverCountDown = 1.0f;
     
     private FitViewport viewport;
@@ -92,12 +94,15 @@ public class PlayScreen implements Screen{
 
         stage = new Stage();
         playerSpeedLabel = new Label("Speed:", VisUI.getSkin());
-        playerSpeedLabel.setPosition(6f, Gdx.graphics.getHeight() - 22f);
+        playerSpeedLabel.setPosition(6f, Gdx.graphics.getHeight() - 82f);
         playerPositionLabel = new Label("Pos:", VisUI.getSkin());
-        playerPositionLabel.setPosition(6f, Gdx.graphics.getHeight() - 42f);
-
+        playerPositionLabel.setPosition(6f, Gdx.graphics.getHeight() - 102f);
         playerHpLabel = new Label("HP:", VisUI.getSkin());
-        playerHpLabel.setPosition(6f, Gdx.graphics.getHeight() - 62f);
+        playerHpLabel.setPosition(6f, Gdx.graphics.getHeight() - 122f);
+        
+        playerSpeedLabel.setVisible(showPlayerInfo);
+        playerPositionLabel.setVisible(showPlayerInfo);
+        playerHpLabel.setVisible(showPlayerInfo);
 
         playerPauseLabel = new Label("Paused\npress Y to go back to menu", labelStyle);
         playerPauseLabel.setAlignment(Align.center);
@@ -199,6 +204,9 @@ public class PlayScreen implements Screen{
         
         background.update(player.getPosition());
 
+        statusHud.setPlayerHp(player.getHpRatio());
+        statusHud.setPlayerSpeed(player.getSpeedRatio());
+        statusHud.setProgress(player.getProgress());
     }
     
     public void inputHandle(float delta) {
@@ -227,6 +235,13 @@ public class PlayScreen implements Screen{
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
             showBox2DDebugRenderer = !showBox2DDebugRenderer;
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            showPlayerInfo = !showPlayerInfo;
+            playerHpLabel.setVisible(showPlayerInfo);
+            playerSpeedLabel.setVisible(showPlayerInfo);
+            playerPositionLabel.setVisible(showPlayerInfo);
         }
         
     }
