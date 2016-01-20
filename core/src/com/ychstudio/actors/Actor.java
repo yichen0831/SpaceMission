@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Disposable;
 
-public abstract class Actor {
+public abstract class Actor implements Disposable {
     
     float x, y;
     float width, height;
@@ -40,4 +41,8 @@ public abstract class Actor {
     public abstract void update(float delta);
     public abstract void render(SpriteBatch batch);
 
+    @Override
+    public void dispose() {
+        body.getWorld().destroyBody(body);
+    }
 }

@@ -42,6 +42,7 @@ public class PlayScreen implements Screen{
     private Stage stage;
     private Label playerSpeedLabel;
     private Label playerPositionLabel;
+    private Label playerHpLabel;
     private Label playerPauseLabel;
     private Label gameOverLabel;
     
@@ -59,6 +60,7 @@ public class PlayScreen implements Screen{
     
     private Array<Actor> actors;
     private Player player;
+    private Ground ground;
     
     private Array<ParticleEffect> particleEffects;
     
@@ -90,6 +92,10 @@ public class PlayScreen implements Screen{
         playerSpeedLabel.setPosition(6f, Gdx.graphics.getHeight() - 22f);
         playerPositionLabel = new Label("Pos:", VisUI.getSkin());
         playerPositionLabel.setPosition(6f, Gdx.graphics.getHeight() - 42f);
+
+        playerHpLabel = new Label("HP:", VisUI.getSkin());
+        playerHpLabel.setPosition(6f, Gdx.graphics.getHeight() - 62f);
+
         playerPauseLabel = new Label("Paused\npress Y to go back to menu", labelStyle);
         playerPauseLabel.setAlignment(Align.center);
         playerPauseLabel.setPosition((Gdx.graphics.getWidth() - playerPauseLabel.getWidth()) / 2,
@@ -104,6 +110,7 @@ public class PlayScreen implements Screen{
         
         stage.addActor(playerSpeedLabel);
         stage.addActor(playerPositionLabel);
+        stage.addActor(playerHpLabel);
         stage.addActor(playerPauseLabel);
         stage.addActor(gameOverLabel);
         
@@ -117,17 +124,15 @@ public class PlayScreen implements Screen{
         box2DDebugRenderer = new Box2DDebugRenderer();
         
         actors = new Array<>();
-        
-        ActorBuilder.setWorld(world);
-        
-        player = ActorBuilder.createPlayer(this, WIDTH/2, 2.5f);
-        actors.add(player);
-        
-        Ground ground = ActorBuilder.createGround(WIDTH/2, 1f);
-        actors.add(ground);
-
         particleEffects = new Array<>();
-        
+
+        ActorBuilder.setWorld(world);
+
+        player = ActorBuilder.createPlayer(this, WIDTH/2, 2.5f);
+        ground = ActorBuilder.createGround(WIDTH/2, 1f);
+
+        gameRestart();
+
         background = new Background(batch, WIDTH, HEIGHT);
         
         paused = false;
@@ -138,9 +143,12 @@ public class PlayScreen implements Screen{
     public void update(float delta) {
         world.step(1f / 60.0f, 8, 3);
 
+        player.update(delta);
+
         for (int i = actors.size - 1; i >=0; i--) {
             actors.get(i).update(delta);
             if (actors.get(i).toBeRemoved) {
+                actors.get(i).dispose();
                 actors.removeIndex(i);
             }
         }
@@ -153,7 +161,7 @@ public class PlayScreen implements Screen{
         
         playerSpeedLabel.setText(String.format("Speed: %.2f", player.getSpeed()));
         playerPositionLabel.setText(String.format("Pos: %.2f, %.2f", player.getPosition().x, player.getPosition().y));
-        
+        playerHpLabel.setText(String.format("HP: %.1f", player.getHp()));
         
         if (!player.isPlayerAlive()) {
             gameOverCountDown -= delta;
@@ -186,7 +194,6 @@ public class PlayScreen implements Screen{
         
         background.update(player.getPosition());
 
-        // TODO make restart function
     }
     
     public void inputHandle(float delta) {
@@ -203,8 +210,7 @@ public class PlayScreen implements Screen{
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (!player.isPlayerAlive()) {
-                player.restart();
-                gameOverCountDown = 1.0f;
+                gameRestart();
             }
         }
         
@@ -235,6 +241,7 @@ public class PlayScreen implements Screen{
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         background.render();
+        player.render(batch);
         for (Actor actor : actors) {
             actor.render(batch);
         }
@@ -242,6 +249,8 @@ public class PlayScreen implements Screen{
         for (ParticleEffect effect : particleEffects) {
             effect.draw(batch, delta);
         }
+
+        ground.render(batch);
         batch.end();
         
         stage.draw();
@@ -249,6 +258,21 @@ public class PlayScreen implements Screen{
         if (showBox2DDebugRenderer) {
             box2DDebugRenderer.render(world, camera.combined);
         }
+    }
+
+    public void gameInit() {
+        for (Actor actor : actors) {
+            actor.dispose();
+        }
+        actors.clear();
+        particleEffects.clear();
+    }
+
+    public void gameRestart() {
+        gameInit();
+        player.restart();
+
+        gameOverCountDown = 1.0f;
     }
     
     public Array<ParticleEffect> getParticleEffectArray() {

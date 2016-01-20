@@ -11,7 +11,8 @@ public class GM {
     public static final float PPM = 64f;
     
     public static final float SKY_LINE = 20f;
-    
+
+    public static final short NOTHING_CATEGORY_BITS = 0;
     public static final short GROUND_CATEGORY_BITS = 1;
     public static final short PLAYER_CATEGORY_BITS = 2;
     public static final short ASTEROID_CATEGORY_BITS = 3;

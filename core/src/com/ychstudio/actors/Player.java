@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.utils.Array;
 import com.ychstudio.gamesys.ActorBuilder;
 import com.ychstudio.gamesys.GM;
@@ -150,12 +151,18 @@ public class Player extends Actor {
     
     public void explode() {
         alive = false;
+        Filter filter = body.getFixtureList().get(0).getFilterData();
+        filter.categoryBits = GM.NOTHING_CATEGORY_BITS;
+        body.getFixtureList().get(0).setFilterData(filter);
         Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
         ActorBuilder.createExplodeEffect(x, y, particleEffects);
     }
     
     public void restart() {
         // reset player
+        Filter filter = body.getFixtureList().get(0).getFilterData();
+        filter.categoryBits = GM.PLAYER_CATEGORY_BITS;
+        body.getFixtureList().get(0).setFilterData(filter);
         body.setLinearVelocity(0, 0);
         body.setTransform(10f, 2.5f, 0);
         body.setAngularVelocity(0);
