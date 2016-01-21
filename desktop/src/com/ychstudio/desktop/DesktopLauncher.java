@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setWindowedMode(400, 600);
 		config.setResizable(false);
-		config.setTitle("SpaceRocket");
+		config.setTitle("SpaceMission");
 //		config.width = 400;
 //		config.height = 600;
 		new Lwjgl3Application(new SpaceRocket(), config);

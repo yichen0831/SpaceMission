@@ -1,17 +1,21 @@
 package com.ychstudio.actors;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ychstudio.gamesys.ActorBuilder;
+import com.ychstudio.gamesys.GM;
 import com.ychstudio.screens.PlayScreen;
 
 public class Asteroid extends Actor {
 
     private PlayScreen playScreen;
     private float damage;
+    
+    private Sound explosionSound;
 
     public Asteroid(PlayScreen playScreen, Body body, TextureRegion textureRegion, float width, float height) {
         this(playScreen, body, new Sprite(textureRegion), width, height);
@@ -21,6 +25,7 @@ public class Asteroid extends Actor {
         super(body, sprite, width, height);
         this.playScreen = playScreen;
         damage = width;
+        explosionSound = GM.getAssetManager().get("audio/Explosion2.ogg", Sound.class);
     }
 
     public float getDamage() {
@@ -29,6 +34,7 @@ public class Asteroid extends Actor {
 
     public void explode() {
         ActorBuilder.createAsteroidExplodeEffect(body.getPosition().x, body.getPosition().y, playScreen.getParticleEffectArray(), MathUtils.ceil(damage));
+        explosionSound.play(GM.soundVolume, 1.1f - (damage) / 10f, (body.getPosition().x - 10f) / 20f);
         toBeRemoved = true;
     }
 

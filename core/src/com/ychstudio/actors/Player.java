@@ -2,6 +2,7 @@ package com.ychstudio.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -35,6 +36,11 @@ public class Player extends Actor {
     
     private boolean alive;
     
+    private Sound explosionSound;
+    private Sound throttleSound;
+    private long leftThrottleSoundId = -1;
+    private long rightThrottleSoundId = -1;
+    
     private final Vector2 tmpV = new Vector2();
 
     public Player(PlayScreen playScreen, Body body, TextureRegion textureRegion, float width, float height) {
@@ -51,6 +57,9 @@ public class Player extends Actor {
         left_throttle = false;
         right_throttle = false;
         
+        throttleSound = GM.getAssetManager().get("audio/Throttle.mp3", Sound.class);
+        explosionSound = GM.getAssetManager().get("audio/Explosion1.ogg", Sound.class);
+        
         rotation = 0;
 
         hp = maxHp;
@@ -65,16 +74,34 @@ public class Player extends Actor {
         if (alive) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 right_throttle = true;
+                if (rightThrottleSoundId < 0) {
+                    rightThrottleSoundId = throttleSound.loop(GM.soundVolume, 1.0f, 0.5f);
+                }
+                else {
+                    throttleSound.resume(rightThrottleSoundId);;
+                }
             }
             else {
                 right_throttle = false;
+                if (rightThrottleSoundId >= 0) {
+                    throttleSound.pause(rightThrottleSoundId);;
+                }
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 left_throttle = true;
+                if (leftThrottleSoundId < 0) {
+                    leftThrottleSoundId = throttleSound.loop(GM.soundVolume, 1.0f, -0.5f);
+                }
+                else {
+                    throttleSound.resume(leftThrottleSoundId);;
+                }
             }
             else {
                 left_throttle = false;
+                if (leftThrottleSoundId >= 0) {
+                    throttleSound.pause(leftThrottleSoundId);;
+                }
             }
 
             if (left_throttle && right_throttle) {
@@ -172,6 +199,14 @@ public class Player extends Actor {
         body.setLinearVelocity(0, 0);
         Array<ParticleEffect> particleEffects = playScreen.getParticleEffectArray();
         ActorBuilder.createExplodeEffect(x, y, particleEffects);
+        
+        if (leftThrottleSoundId >= 0) {
+            throttleSound.pause(leftThrottleSoundId);
+        }
+        if (rightThrottleSoundId >= 0) {
+            throttleSound.pause(rightThrottleSoundId);
+        }
+        explosionSound.play(GM.soundVolume, 1f, (x - 10f) / 20f);
     }
     
     public void restart() {

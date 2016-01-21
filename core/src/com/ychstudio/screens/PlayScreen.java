@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.MathUtils;
@@ -41,6 +43,8 @@ public class PlayScreen implements Screen{
     
     private SpaceRocket game;
     private SpriteBatch batch;
+    
+    private Sprite keysSprite;
     
     private Stage stage;
     private Label playerSpeedLabel;
@@ -87,6 +91,10 @@ public class PlayScreen implements Screen{
     @Override
     public void show() {
         batch = new SpriteBatch();
+        
+        TextureAtlas textureAtlas = GM.getAssetManager().get("images/actors.pack", TextureAtlas.class);
+        keysSprite = new Sprite(textureAtlas.findRegion("Keys"));
+        keysSprite.setBounds(8.5f, 0.5f, 3f, 1f);
 
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("font/MONOFONT.TTF"));
         FreeTypeFontParameter fontParameter = new FreeTypeFontParameter();
@@ -298,6 +306,7 @@ public class PlayScreen implements Screen{
         }
 
         ground.render(batch);
+        keysSprite.draw(batch);
         batch.end();
         
         statusHud.render();

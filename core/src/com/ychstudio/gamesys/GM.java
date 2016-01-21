@@ -1,6 +1,8 @@
 package com.ychstudio.gamesys;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -22,6 +24,9 @@ public class GM {
     public static final short PLAYER_MASK_BITS = GROUND_CATEGORY_BITS | ASTEROID_CATEGORY_BITS;
     public static final short ASTEROID_MASK_BITS = PLAYER_CATEGORY_BITS;
 
+    public static float soundVolume = 1.0f;
+    public static float musicVolume = 0.5f;
+    
     private AssetManager assetManager;
 
     public static GM getInstance() {
@@ -48,6 +53,12 @@ public class GM {
         assetManager.load("particles/asteroid_explode.particle", ParticleEffect.class);
         assetManager.load("particles/asteroid_explode_small.particle", ParticleEffect.class);
         assetManager.load("particles/asteroid_explode_medium.particle", ParticleEffect.class);
+        
+        assetManager.load("audio/Menu.mp3", Sound.class);
+        assetManager.load("audio/Throttle.mp3", Sound.class);
+        assetManager.load("audio/Explosion1.ogg", Sound.class);
+        assetManager.load("audio/Explosion2.ogg", Sound.class);
+        assetManager.load("audio/S31-Night Prowler.ogg", Music.class);
         assetManager.finishLoading();
     }
 }

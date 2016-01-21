@@ -3,6 +3,7 @@ package com.ychstudio;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
+import com.ychstudio.gamesys.GM;
 import com.ychstudio.screens.MenuScreen;
 import com.ychstudio.screens.PlayScreen;
 import com.ychstudio.screens.transitions.ScreenTransition;
@@ -23,6 +25,8 @@ public class SpaceRocket extends Game {
 	
 	private int w;
 	private int h;
+	
+	private Music bgm;
 	
 	private Screen nextScreen;
 	
@@ -52,6 +56,11 @@ public class SpaceRocket extends Game {
 		stage.addActor(versionLabel);
 		
 		setScreen(new MenuScreen(this));
+		
+		bgm = GM.getAssetManager().get("audio/S31-Night Prowler.ogg", Music.class);
+		bgm.setLooping(true);
+		bgm.setVolume(GM.musicVolume);
+		bgm.play();
 	}
 	
 	public void startGame() {

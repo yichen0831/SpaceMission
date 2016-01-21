@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,6 +36,8 @@ public class MenuScreen implements Screen {
 
     private AssetManager assetManager;
 
+    private Sound menuSound;
+    
     private BitmapFont monoFont30;
     private BitmapFont monoFont64;
 
@@ -48,6 +51,8 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
+        
+        menuSound = GM.getAssetManager().get("audio/Menu.mp3", Sound.class);
         
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/MONOFONT.TTF"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -69,7 +74,7 @@ public class MenuScreen implements Screen {
         Image starsImage = new Image(assetManager.get("images/Stars.png", Texture.class));
         stage.addActor(starsImage);
 
-        Label titleLabel = new Label("SpaceRocket", new Label.LabelStyle(monoFont64, Color.WHITE));
+        Label titleLabel = new Label("SpaceMission", new Label.LabelStyle(monoFont64, Color.WHITE));
         titleLabel.setPosition((Gdx.graphics.getWidth() - titleLabel.getWidth()) / 2, Gdx.graphics.getHeight() - 180);
         
         Label startGameLabel = new Label("Start", new Label.LabelStyle(monoFont30, Color.WHITE));
@@ -111,6 +116,7 @@ public class MenuScreen implements Screen {
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (selected == 0) {
+                menuSound.play();
                 game.startGame();
             }
             else if (selected == 1) {

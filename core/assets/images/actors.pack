@@ -38,86 +38,93 @@ asteroid_r4
   orig: 72, 58
   offset: 0, 0
   index: -1
+Keys
+  rotate: false
+  xy: 427, 77
+  size: 96, 32
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
 asteroid_r5
   rotate: false
-  xy: 427, 51
+  xy: 525, 51
   size: 62, 58
   orig: 62, 58
   offset: 0, 0
   index: -1
 Shield
   rotate: false
-  xy: 491, 49
+  xy: 589, 49
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
 Lightning
   rotate: false
-  xy: 553, 49
+  xy: 651, 49
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
 Target
   rotate: false
-  xy: 615, 49
+  xy: 713, 49
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
 asteroid_b3
   rotate: false
-  xy: 677, 59
+  xy: 775, 59
   size: 57, 50
   orig: 57, 50
   offset: 0, 0
   index: -1
 asteroid_r3
   rotate: false
-  xy: 736, 60
+  xy: 834, 60
   size: 56, 49
   orig: 56, 49
   offset: 0, 0
   index: -1
 SpaceShip
   rotate: false
-  xy: 794, 68
+  xy: 892, 68
   size: 48, 41
   orig: 48, 41
   offset: 0, 0
   index: -1
 asteroid_b2
   rotate: false
-  xy: 844, 67
-  size: 42, 42
-  orig: 42, 42
-  offset: 0, 0
-  index: -1
-asteroid_r2
-  rotate: false
-  xy: 888, 67
+  xy: 942, 67
   size: 42, 42
   orig: 42, 42
   offset: 0, 0
   index: -1
 asteroid_b1
   rotate: false
-  xy: 932, 71
+  xy: 986, 71
   size: 37, 38
   orig: 37, 38
   offset: 0, 0
   index: -1
 asteroid_r1
   rotate: false
-  xy: 971, 71
+  xy: 986, 31
   size: 37, 38
   orig: 37, 38
   offset: 0, 0
   index: -1
+asteroid_r2
+  rotate: false
+  xy: 203, 2
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
 Flame
   rotate: false
-  xy: 203, 1
+  xy: 247, 1
   size: 23, 43
   orig: 23, 43
   offset: 0, 0
