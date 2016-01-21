@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -45,6 +46,7 @@ public class PlayScreen implements Screen{
     private Label playerPositionLabel;
     private Label playerHpLabel;
     private Label playerPauseLabel;
+    private Label goalLabel;
     private Label gameOverLabel;
     
     private boolean showPlayerInfo = false;
@@ -60,6 +62,9 @@ public class PlayScreen implements Screen{
     
     private boolean paused;
     private boolean player_paused;
+    private boolean goal;
+    
+    private float goalY = 22f; // the y position of goal
     
     private Array<Actor> actors;
     private Player player;
@@ -70,6 +75,7 @@ public class PlayScreen implements Screen{
     private Background background;
 
     private BitmapFont monoFont24;
+    private BitmapFont monoFont64;
     
     private StatusHud statusHud;
     
@@ -86,11 +92,18 @@ public class PlayScreen implements Screen{
         fontParameter.size = 24;
         fontParameter.magFilter = Texture.TextureFilter.Linear;
         fontParameter.minFilter = Texture.TextureFilter.Linear;
-
+        
         monoFont24 = fontGenerator.generateFont(fontParameter);
+        
+        fontParameter.size = 64;
+        fontParameter.color = new Color(0.8f, 0.8f, 0.9f, 1.0f);
+        fontParameter.borderColor = new Color(0.6f, 0.6f, 0.7f, 1.0f);
+        fontParameter.borderWidth = 2.8f;
+        
+        monoFont64 = fontGenerator.generateFont(fontParameter);        
         fontGenerator.dispose();
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle(monoFont24, Color.WHITE);
+        LabelStyle labelStyle = new LabelStyle(monoFont24, Color.WHITE);
 
         stage = new Stage();
         playerSpeedLabel = new Label("Speed:", VisUI.getSkin());
@@ -110,6 +123,12 @@ public class PlayScreen implements Screen{
                                         (Gdx.graphics.getHeight() - playerPauseLabel.getHeight()) / 2);
         playerPauseLabel.setVisible(false);
         
+        LabelStyle goalLabelStyle = new LabelStyle(monoFont64, Color.WHITE);
+        goalLabel = new Label("Goal!", goalLabelStyle);
+        goalLabel.setPosition((Gdx.graphics.getWidth() - goalLabel.getWidth()) / 2,
+                                (Gdx.graphics.getHeight() - goalLabel.getHeight()) / 2);
+        goalLabel.setVisible(false);
+        
         gameOverLabel = new Label("Game Over\npress Enter to restart", labelStyle);
         gameOverLabel.setAlignment(Align.center);
         gameOverLabel.setPosition((Gdx.graphics.getWidth() - gameOverLabel.getWidth()) / 2,
@@ -120,6 +139,7 @@ public class PlayScreen implements Screen{
         stage.addActor(playerPositionLabel);
         stage.addActor(playerHpLabel);
         stage.addActor(playerPauseLabel);
+        stage.addActor(goalLabel);
         stage.addActor(gameOverLabel);
         
         camera = new OrthographicCamera();
@@ -147,6 +167,7 @@ public class PlayScreen implements Screen{
         
         paused = false;
         player_paused = false;
+        goal = false;
         
     }
     
@@ -173,7 +194,11 @@ public class PlayScreen implements Screen{
         playerPositionLabel.setText(String.format("Pos: %.2f, %.2f", player.getPosition().x, player.getPosition().y));
         playerHpLabel.setText(String.format("HP: %.1f", player.getHp()));
         
-        if (!player.isPlayerAlive()) {
+        if (player.goal(goalY)) {
+            goal = true;
+        }
+        
+        if (!player.isPlayerAlive() && !goal) {
             gameOverCountDown -= delta;
             if (gameOverCountDown <= 0) {
                 gameOverLabel.setVisible(true);
@@ -181,6 +206,7 @@ public class PlayScreen implements Screen{
         }
         else {
             gameOverLabel.setVisible(false);
+            goalLabel.setVisible(goal);
         }
         
         float target_zoom;
@@ -212,7 +238,7 @@ public class PlayScreen implements Screen{
     public void inputHandle(float delta) {
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (player.isPlayerAlive()) {
+            if (player.isPlayerAlive() && !goal) {
                 player_paused = !player_paused;
                 playerPauseLabel.setVisible(player_paused);
             }
@@ -222,7 +248,7 @@ public class PlayScreen implements Screen{
         }
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            if (!player.isPlayerAlive()) {
+            if (!player.isPlayerAlive() || goal) {
                 gameRestart();
             }
         }
@@ -294,6 +320,7 @@ public class PlayScreen implements Screen{
         player.restart();
 
         gameOverCountDown = 1.0f;
+        goal = false;
     }
     
     public Array<ParticleEffect> getParticleEffectArray() {
@@ -332,5 +359,6 @@ public class PlayScreen implements Screen{
         stage.dispose();
         statusHud.dispose();
         monoFont24.dispose();
+        monoFont64.dispose();
     }
 }

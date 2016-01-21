@@ -61,6 +61,7 @@ public class Player extends Actor {
     @Override
     public void update(float delta) {
         
+        // player controls
         if (alive) {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 right_throttle = true;
@@ -217,6 +218,10 @@ public class Player extends Actor {
     
     public Vector2 getPosition() {
         return body.getPosition();
+    }
+    
+    public boolean goal(float goal) {
+        return alive && y >= goal;
     }
 
 }
