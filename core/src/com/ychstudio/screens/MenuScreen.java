@@ -18,12 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.ychstudio.SpaceRocket;
+import com.ychstudio.SpaceMission;
 import com.ychstudio.gamesys.GM;
 
 public class MenuScreen implements Screen {
     
-    private SpaceRocket game;
+    private SpaceMission game;
     private SpriteBatch batch;
     
     private FitViewport viewport;
@@ -43,7 +43,7 @@ public class MenuScreen implements Screen {
 
     private boolean paused;
 
-    public MenuScreen(SpaceRocket game) {
+    public MenuScreen(SpaceMission game) {
         this.game = game;
         assetManager = GM.getAssetManager();
     }

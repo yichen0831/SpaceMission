@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
-import com.ychstudio.SpaceRocket;
+import com.ychstudio.SpaceMission;
 import com.ychstudio.actors.Actor;
 import com.ychstudio.actors.Asteroid;
 import com.ychstudio.actors.Ground;
@@ -41,7 +41,7 @@ public class PlayScreen implements Screen{
     public final float WIDTH = 20f;
     public final float HEIGHT = 30f;
     
-    private SpaceRocket game;
+    private SpaceMission game;
     private SpriteBatch batch;
     
     private Sprite keysSprite;
@@ -84,7 +84,7 @@ public class PlayScreen implements Screen{
     
     private StatusHud statusHud;
     
-    public PlayScreen(SpaceRocket game) {
+    public PlayScreen(SpaceMission game) {
         this.game = game;
     }
 

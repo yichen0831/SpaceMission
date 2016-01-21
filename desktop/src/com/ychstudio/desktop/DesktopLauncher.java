@@ -2,7 +2,7 @@ package com.ychstudio.desktop;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.ychstudio.SpaceRocket;
+import com.ychstudio.SpaceMission;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -12,6 +12,6 @@ public class DesktopLauncher {
 		config.setTitle("SpaceMission");
 //		config.width = 400;
 //		config.height = 600;
-		new Lwjgl3Application(new SpaceRocket(), config);
+		new Lwjgl3Application(new SpaceMission(), config);
 	}
 }

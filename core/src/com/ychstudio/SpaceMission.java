@@ -17,7 +17,7 @@ import com.ychstudio.screens.PlayScreen;
 import com.ychstudio.screens.transitions.ScreenTransition;
 import com.ychstudio.screens.transitions.SlideLeftTransition;
 
-public class SpaceRocket extends Game {
+public class SpaceMission extends Game {
 	private SpriteBatch batch;
 	private FitViewport viewport;
 	private Stage stage;
