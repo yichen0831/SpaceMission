@@ -7,8 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ychstudio.actors.Asteroid;
 import com.ychstudio.actors.Ground;
@@ -72,6 +77,7 @@ public class ActorBuilder {
         bodyDef.type = BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.gravityScale = 0;
+        bodyDef.angularVelocity = (MathUtils.random(60f) - 30f) * MathUtils.degRad;
 
         Body body = world.createBody(bodyDef);
 

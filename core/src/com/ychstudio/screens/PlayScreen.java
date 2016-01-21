@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.ychstudio.SpaceRocket;
 import com.ychstudio.actors.Actor;
+import com.ychstudio.actors.Asteroid;
 import com.ychstudio.actors.Ground;
 import com.ychstudio.actors.Player;
 import com.ychstudio.background.Background;
@@ -64,7 +65,7 @@ public class PlayScreen implements Screen{
     private boolean player_paused;
     private boolean goal;
     
-    private float goalY = 22f; // the y position of goal
+    private float goalY = 1000f; // the y position of goal
     
     private Array<Actor> actors;
     private Player player;
@@ -319,8 +320,28 @@ public class PlayScreen implements Screen{
         gameInit();
         player.restart();
 
+        setupLevel();
+        
         gameOverCountDown = 1.0f;
         goal = false;
+    }
+    
+    public void setupLevel() {
+        int[] asteroidNums = new int[] {
+                24, 24, 20, 20, 20, 20, 20, 20, 20, 20, 16, 12
+        };
+        
+        for (int i = 0; i < asteroidNums.length; i++) {
+            int num = asteroidNums[i];
+            float y = 36f + goalY / asteroidNums.length * i;
+            for (int j = 0; j < num; j ++) {
+                int size = MathUtils.random(1, 6);
+                y += size / 2f + MathUtils.random(0.5f, 2f);
+                float x = 0.5f + MathUtils.random(18.5f);
+                Asteroid asteroid = ActorBuilder.createAsteroid(this, x, y, i % 2 == 0 ? "r" : "b", size);
+                actors.add(asteroid);
+            }
+        }
     }
     
     public Array<ParticleEffect> getParticleEffectArray() {

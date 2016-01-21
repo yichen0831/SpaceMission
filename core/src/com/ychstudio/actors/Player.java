@@ -28,7 +28,7 @@ public class Player extends Actor {
 
     private float maxSpeed = 20f;
     private float speed;
-    private float maxHp = 10f;
+    private float maxHp = 36f;
     private float hp;
     
     private float goalY = 1000f; // the y position of the goal
